@@ -6,15 +6,16 @@ import java.nio.file.Paths
 
 class FileReaderTxtTest {
     FileReaderTxt fileReaderTxt = new FileReaderTxt()
+    private static final String homeDirectory = "P:/Users/dp-ptcstd-10/Downloads"
 
     @Test
     void testReadFileMovie() {
-        fileReaderTxt.readFileMovie(Paths.get('/home/user/JULIA/MovieLand/movie.txt'))
+        fileReaderTxt.readFileMovie(Paths.get(homeDirectory, 'movie.txt'))
     }
 
     @Test
     void testReadFileGenre(){
-        fileReaderTxt.readFileGenre(Paths.get('/home/user/JULIA/MovieLand/genre.txt'))
+        fileReaderTxt.readFileGenre(Paths.get(homeDirectory, 'genre.txt'))
     }
 
     @Test
@@ -24,11 +25,16 @@ class FileReaderTxtTest {
 
     @Test
     void testReadFileUser() {
-        fileReaderTxt.readFileUser(Paths.get('/home/user/JULIA/MovieLand/user.txt'))
+        fileReaderTxt.readFileUser(Paths.get(homeDirectory, 'user.txt'))
     }
 
     @Test
     void testReadFileReview() {
-        fileReaderTxt.readFileReview(Paths.get('/home/user/JULIA/MovieLand/review.txt'))
+        fileReaderTxt.readFileReview(Paths.get(homeDirectory, 'review.txt'))
+    }
+
+    @Test
+    void testReadFilePoster() {
+        fileReaderTxt.readFilePoster(Paths.get(homeDirectory, 'poster.txt'))
     }
 }

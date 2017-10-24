@@ -18,11 +18,7 @@ public class FileReaderTxt {
         List<String> lines;
         int lineCounter = 0;
         int idCounter = 1;
-        try {
-            lines = Files.readAllLines(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        lines = getAllLines(path);
         Movie movie = null;
         for (String line : lines) {
             line = removeBOM(line);
@@ -66,15 +62,21 @@ public class FileReaderTxt {
         return movies;
     }
 
-    public Map<String, Integer> readFileGenre(Path path) {
-        Map<String, Integer> genres = new HashMap<>();
-        int lineCounter = 1;
+    private List<String> getAllLines(Path path) {
         List<String> lines;
         try {
             lines = Files.readAllLines(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return lines;
+    }
+
+    public Map<String, Integer> readFileGenre(Path path) {
+        Map<String, Integer> genres = new HashMap<>();
+        int lineCounter = 1;
+        List<String> lines;
+        lines = getAllLines(path);
         for (String line : lines) {
             if (!line.isEmpty()) {
                 line = removeBOM(line);
@@ -103,11 +105,7 @@ public class FileReaderTxt {
         List<String> lines;
         int lineCounter = 0;
         int idCounter = 1;
-        try {
-            lines = Files.readAllLines(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        lines = getAllLines(path);
         User user = null;
         for (String line : lines) {
             line = removeBOM(line);
@@ -139,11 +137,7 @@ public class FileReaderTxt {
         List<String> lines;
         int lineCounter = 0;
         int idCounter = 1;
-        try {
-            lines = Files.readAllLines(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        lines = getAllLines(path);
         Review review = null;
         for (String line : lines) {
             line = removeBOM(line);
@@ -168,6 +162,22 @@ public class FileReaderTxt {
             }
         }
         return reviews;
+    }
+
+    public Map<String, String> readFilePoster(Path path) {
+        Map<String, String> posters = new HashMap<>();
+        List<String> lines;
+        lines = getAllLines(path);
+        for (String line : lines) {
+            line = removeBOM(line);
+            int httpsIndex = line.indexOf("https");
+            String movieNameRussaian = line.substring(0, httpsIndex - 1);
+            String picturePath = line.substring(httpsIndex);
+            System.out.println(movieNameRussaian);
+            System.out.println(picturePath);
+            posters.put(movieNameRussaian, picturePath);
+        }
+        return posters;
     }
 
 

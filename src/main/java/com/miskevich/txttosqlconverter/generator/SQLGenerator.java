@@ -9,9 +9,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class SQLGenerator {
-    private static final String MOVIE_PREFIX = "insert into movie (id, name_russian, name_native, released_date, plot, rating, price)\n" +
+    private static final String MOVIE_PREFIX = "insert into movie (id, name_russian, name_native, released_date, plot, rating, price, picture_path)\n" +
             "values(";
     private static final String GENRE_PREFIX = "insert into genre (id, name) values(";
+    private static final String COUNTRY_PREFIX = "insert into country (id, name) values(";
     private static final String MOVIE_GENRE_PREFIX = "insert into movie_genre(movie_id, genre_id) values(";
     private static final String MOVIE_COUNTRY_PREFIX = "insert into movie_country (movie_id, country_id) values(";
     private static final String USER_PREFIX = "insert into user(id, nickname, email, password)\n" +
@@ -19,7 +20,7 @@ public class SQLGenerator {
     private static final String REVIEW_PREFIX = "insert into review(id, movie_id, user_id, description)\n" +
             "values(";
 
-    public String generateMovie(List<Movie> movies){
+    public String generateMovie(List<Movie> movies, Map<String, String> posters){
         StringBuilder movieSQL = new StringBuilder();
         for (Movie movie : movies){
             movieSQL.append(MOVIE_PREFIX)
@@ -36,9 +37,19 @@ public class SQLGenerator {
                     .append(movie.getRating())
                     .append(", ")
                     .append(movie.getPrice())
-                    .append(");\n");
+                    .append(", \"")
+                    .append(getPicturePathByMovieNameRussian(movie.getNameRussian(), posters))
+                    .append("\");\n");
         }
         return movieSQL.toString();
+    }
+
+    private String getPicturePathByMovieNameRussian(String nameRussian, Map<String, String> posters){
+        String picturePath = posters.get(nameRussian);
+        if(picturePath != null){
+            return picturePath;
+        }
+        throw new NoSuchElementException("No poster was found with nameRussian: " + nameRussian);
     }
 
     public String generateGenre(Map<String, Integer> genres){
@@ -48,6 +59,18 @@ public class SQLGenerator {
                     .append(genre.getValue())
                     .append(", \"")
                     .append(genre.getKey())
+                    .append("\");\n");
+        }
+        return genreSQL.toString();
+    }
+
+    public String generateCountry(Map<String, Integer> countries){
+        StringBuilder genreSQL = new StringBuilder();
+        for(Map.Entry<String, Integer> country : countries.entrySet()){
+            genreSQL.append(COUNTRY_PREFIX)
+                    .append(country.getValue())
+                    .append(", \"")
+                    .append(country.getKey())
                     .append("\");\n");
         }
         return genreSQL.toString();

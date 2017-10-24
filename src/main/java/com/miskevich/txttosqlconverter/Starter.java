@@ -13,16 +13,19 @@ import java.util.Map;
 
 public class Starter {
 
-    private static final String homeDirectory = "/home/user/JULIA/MovieLand/";
+    private static final String homeDirectory = "P:/Users/dp-ptcstd-10/Downloads/";
 
     public static void main(String[] args) {
         FileReaderTxt fileReaderTxt = new FileReaderTxt();
         SQLGenerator sqlGenerator = new SQLGenerator();
         SQLFileWriter sqlFileWriter = new SQLFileWriter();
 
+        //get Posters
+        Map<String, String> posters = fileReaderTxt.readFilePoster(Paths.get(homeDirectory, "poster.txt"));
+
         //movie.sql
         List<Movie> movies = fileReaderTxt.readFileMovie(Paths.get(homeDirectory, "movie.txt"));
-        String movieSQL = sqlGenerator.generateMovie(movies);
+        String movieSQL = sqlGenerator.generateMovie(movies, posters);
         sqlFileWriter.writeSQLFile("movie.sql", movieSQL);
 
         //genre.sql
@@ -34,8 +37,12 @@ public class Starter {
         String movieGenreSQL = sqlGenerator.generateMovieGenre(movies, genres);
         sqlFileWriter.writeSQLFile("movie_genre.sql", movieGenreSQL);
 
-        //movie_country.sql
+        //country.sql
         Map<String, Integer> countries = fileReaderTxt.generateCountriesFromScratch();
+        String countrySQL = sqlGenerator.generateCountry(countries);
+        sqlFileWriter.writeSQLFile("country.sql", countrySQL);
+
+        //movie_country.sql
         String movieCountrySQL = sqlGenerator.generateMovieCountry(movies, countries);
         sqlFileWriter.writeSQLFile("movie_country.sql", movieCountrySQL);
 
